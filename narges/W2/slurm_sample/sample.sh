@@ -6,24 +6,24 @@
 # ==============================================================================
 
 # A descriptive name for your job in the queue (visible via 'squeue -u [YOUR_USERNAME]')
-SBATCH --job-name="granite_run"
+#SBATCH --job-name="granite_run"
 
 # Maximum wall-clock time (Hours:Minutes:Seconds). 
 # Your job will be terminated if it exceeds this.
-SBATCH --time=02:00:00
+#SBATCH --time=02:00:00
 
 # This requests 2x NVIDIA A100 GPUs.
-SBATCH --gres=gpu:a100:2 
+#SBATCH --gres=gpu:a100:2 
 
 # Specifies the queue/partition. 'gpu' is standard for AI tasks.
-SBATCH --partition=gpu
+#SBATCH --partition=gpu
 
 # CPU RAM request to load the model weights into memory before they are transferred to the GPUs.
-SBATCH --mem=240G
+#SBATCH --mem=240G
 
 # Where the console output (also errors) will be saved. 
 # %j is a placeholder that SLURM replaces with the unique Job ID.
-SBATCH --output=granite_%j.log
+#SBATCH --output=/pc2/users/n/narges/dsse/dsse-assigment-1/narges/W2/slurm_sample/granite_%j.log
 
 
 # ==============================================================================
@@ -51,8 +51,9 @@ source /pc2/users/n/narges/dsse/dsse-assigment-1/narges/W2/slurm_sample/.venv/bi
 # 2. OPTIMIZATIONS & SECRETS
 # ==============================================================================
 
-# Tells Hugging Face where to store/find model weights. 
-export HF_HOME=/pc2/users/n/narges/dsse/dsse-assigment-1/narges/W2/slurm_sample/huggingface_cache
+# Hugging Face cache: use cluster scratch (large quota). $HOME is often small/full on /pc2/users.
+export HF_HOME="${HOME}/scratch/huggingface_cache"
+mkdir -p "$HF_HOME"
 
 # Memory optimization for PyTorch. 
 # 'expandable_segments' helps prevent "Out of Memory" (OOM) errors by managing 
@@ -70,10 +71,8 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
 echo "Starting..."
 
-# Executes your Python script. 
-# Because we used #SBATCH --output, all print statements in sample.py 
-# will appear in your .log file in real-time.
-python sample.py
+# One process: load model once, run all prompting techniques, save under results/job_<JOBID>/
+python run_all_techniques.py
 
 # --- IMPORTANT ---
 # Submitting: Run 'sbatch sample.sh' to put this in the queue.
