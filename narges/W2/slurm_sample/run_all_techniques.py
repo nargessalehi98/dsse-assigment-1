@@ -11,7 +11,6 @@ from pathlib import Path
 
 import prompt_chain_of_thought
 import prompt_few_shot
-import prompt_rag
 import prompt_self_consistency
 import prompt_structured_output
 import prompt_zero_shot
