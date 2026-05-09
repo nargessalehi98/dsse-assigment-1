@@ -23,8 +23,7 @@
 
 # Where the console output (also errors) will be saved. 
 # %j is a placeholder that SLURM replaces with the unique Job ID.
-#SBATCH --output=/scratch/n/narges/logs/granite_%j.log
-#SBATCH --error=/scratch/n/narges/logs/granite_%j.err
+#SBATCH --output=/pc2/users/n/narges/dsse/dsse-assigment-1/narges/W2/slurm_sample/granite_%j.log
 
 
 # ==============================================================================
@@ -71,9 +70,6 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 # ==============================================================================
 
 echo "Starting..."
-
-# Run from the directory you submitted in (so results/ and imports resolve).
-cd "${SLURM_SUBMIT_DIR:-.}"
 
 # One process: load model once, run all prompting techniques, save under results/job_<JOBID>/
 python run_all_techniques.py
