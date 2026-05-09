@@ -21,7 +21,6 @@ SIMPLE_TECHNIQUES = [
     ("few_shot", prompt_few_shot.build_messages, prompt_few_shot.GEN_KW),
     ("chain_of_thought", prompt_chain_of_thought.build_messages, prompt_chain_of_thought.GEN_KW),
     ("structured_output", prompt_structured_output.build_messages, prompt_structured_output.GEN_KW),
-    ("rag", prompt_rag.build_messages, prompt_rag.GEN_KW),
 ]
 
 
